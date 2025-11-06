@@ -38,7 +38,7 @@ const Layout = () => {
                     </a>
                   </li>
                   <li>
-                    <a class="menutrai" href="/admin/products">
+                    <a class="menutrai" href="/adin/products">
                       QUAN TRI
                     </a>
                   </li>
