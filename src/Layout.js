@@ -37,6 +37,11 @@ const Layout = () => {
                       LISTPRODUCT
                     </a>
                   </li>
+                  <li>
+                    <a class="menutrai" href="/admin/products">
+                      QUAN TRI
+                    </a>
+                  </li>
                 </ul>
               </nav>
             </div>
