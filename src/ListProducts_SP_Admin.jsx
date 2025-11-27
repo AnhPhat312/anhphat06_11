@@ -8,7 +8,7 @@ const ListProducts_SP_Admin = () => {
 
   const fetchProducts = async () => {
     const { data, error } = await supabase
-      .from("product1")
+      .from("products")
       .select("*")
       .order("id", { ascending: true });
     if (error) console.error("Lỗi:", error.message);

@@ -11,7 +11,7 @@ const ProductDetail = () => {
     const fetchProduct = async () => {
       try {
         const { data, error } = await supabase
-          .from("product1")
+          .from("products")
           .select("*")
           .eq("id", id)
           .single();

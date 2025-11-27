@@ -10,7 +10,7 @@ const ListProducts_SP = () => {
     const fetchProducts = async () => {
       try {
         const { data, error } = await supabase
-          .from("product1")
+          .from("products")
           .select("*")
           .order("id", { ascending: true });
         if (error) throw error;
