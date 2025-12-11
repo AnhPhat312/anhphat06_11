@@ -1,12 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
-// Giả định bạn vẫn giữ file ảnh logo ở đường dẫn này
+import "./css/layout.css";
 import anhlogo from "./assets/images/banner (2).png";
+import { Outlet, useNavigate, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useCart } from "./CartContext";
 
-// --- START: Component Layout Gộp Chung ---
 const Layout = () => {
   const [user, setUser] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
+
+  const { cartItems } = useCart();
+  const totalQuantity = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -21,238 +28,172 @@ const Layout = () => {
     navigate("/login");
   };
 
-  const globalStyles = `
-    /* --- CSS Gộp từ main.css --- */
-    body {
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-        background-color: #f0f2f5; 
-        color: #333;
-    }
-
-    a {
-        text-decoration: none;
-        color: inherit;
-    }
-
-    /* --- HEADER / BANNER TOP --- */
-    .header1 {
-        background-color: #ffffff; 
-        border-bottom: 1px solid #ddd;
-    }
-
-    .banner1 {
-        display: flex; 
-        justify-content: space-between; 
-        align-items: center; 
-        max-width: 1200px; 
-        margin: 0 auto; 
-        padding: 10px 20px;
-    }
-
-    #topleft .ul1 {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        gap: 20px;
-    }
-
-    #topleft .ul1 li a {
-        color: #8c0000; 
-        font-weight: bold;
-        font-size: 0.85rem;
-        padding: 5px;
-        transition: color 0.2s;
-    }
-
-    #topleft .ul1 li a:hover {
-        color: #e63946; 
-    }
-
-    /* LOGO */
-    #logo img {
-        max-width: 500px;
-        height: auto;
-        display: block; 
-    }
-
-    /* PHẦN TÌM KIẾM */
-    #divtimkiem {
-        font-size: 0.9rem;
-        color: #666;
-        text-align: right;
-        width: 300px;
-    }
-
-    /* --- MENU BAR DƯỚI (MÀU ĐỎ) --- */
-    .menubar {
-        background-color: #a80000; 
-        color: white;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 20px;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-
-    .menubar-left {
-        display: flex;
-        gap: 30px;
-    }
-
-    .menu-item {
-        font-weight: 600;
-        padding: 5px 0;
-        transition: opacity 0.3s;
-        color: white; 
-    }
-
-    .menu-item:hover {
-        opacity: 0.8;
-    }
-
-    /* --- KHU VỰC USER/LOGIN (MENU BAR PHẢI) --- */
-    .menubar-right {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-
-    .login-link {
-        color: white;
-        font-weight: 600;
-        padding: 5px 10px;
-        border: 1px solid white;
-        border-radius: 4px;
-        transition: background-color 0.2s, color 0.2s;
-    }
-
-    .login-link:hover {
-        background-color: white;
-        color: #a80000;
-    }
-
-    .username {
-        color: white;
-        font-weight: 600;
-        margin-right: 5px;
-    }
-
-    .logout-btn {
-        background-color: transparent;
-        color: white;
-        border: 1px solid white;
-        padding: 5px 10px;
-        cursor: pointer;
-        border-radius: 4px;
-        font-size: 0.9rem;
-        transition: background-color 0.2s, color 0.2s;
-    }
-
-    .logout-btn:hover {
-        background-color: #fff;
-        color: #a80000;
-    }
-
-    /* --- CONTAINER NỘI DUNG CHÍNH --- */
-    .container {
-        max-width: 1200px;
-        margin: 20px auto;
-        padding: 20px;
-        background-color: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        min-height: 60vh;
-    }
-
-    /* --- FOOTER --- */
-    footer {
-        background-color: #333;
-        color: white;
-        text-align: center;
-        margin-top: 30px;
-    }
-  `;
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   return (
-    <>
-      {/* 1. Nhúng CSS vào thẻ <style> */}
-      <style>{globalStyles}</style>
+    <div className="theme-black-red">
+      {/* Toàn bộ header đặt trong một div có chiều rộng 100% */}
+      <div className="full-width-header">
+        <header className="header-container">
+          {/* Top Header - Cùng hàng với logo và search */}
+          <div className="top-header">
+            <div className="container-full">
+              <div className="top-header-content">
+                <div className="top-links-left">
+                  <ul className="top-links">
+                    <li>
+                      <Link to="/">TRANG CHỦ</Link>
+                    </li>
+                    <li>
+                      <Link to="/trang1">EGOV</Link>
+                    </li>
+                    <li>
+                      <Link to="/admin/products">QUẢN TRỊ</Link>
+                    </li>
+                  </ul>
+                </div>
+                
+                {/* User info ở bên phải */}
+                <div className="top-links-right">
+                  {user ? (
+                    <div className="user-info">
+                      <span className="user-greeting">
+                        <i className="user-icon">👤</i> {user.username}
+                      </span>
+                      <button className="logout-btn" onClick={handleLogout}>
+                        Đăng xuất
+                      </button>
+                    </div>
+                  ) : (
+                    <Link to="/login" className="login-link">
+                      Đăng nhập
+                    </Link>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
 
-      <header>
-        {/* Top Header: Logo, Menu Top, Tìm kiếm */}
-        <div id="divheader" className="header1">
-          <div id="banner" className="banner1">
-            <div id="topleft">
-              <ul className="ul1">
-                <li>
-                  <a href="/#">TRANG CHỦ</a>
+          {/* Main Header - Logo, Search, Cart */}
+          <div className="main-header">
+            <div className="container-full">
+              <div className="header-content">
+                {/* Logo lớn hơn */}
+                <div className="logo-container">
+                  <Link to="/">
+                    <img src={anhlogo} alt="Logo" className="logo-large" />
+                  </Link>
+                </div>
+
+                {/* Search bar */}
+                <div className="search-container-large">
+                  <div className="search-box">
+                    <input 
+                      type="text" 
+                      placeholder="Tìm kiếm sản phẩm..." 
+                      className="search-input"
+                    />
+                    <button className="search-btn">
+                      <i className="search-icon">🔍</i>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Cart và menu mobile */}
+                <div className="header-actions">
+                  <Link to="/cart" className="cart-btn">
+                    <div className="cart-icon-container">
+                      <i className="cart-icon">🛒</i>
+                      {totalQuantity > 0 && (
+                        <span className="cart-badge">{totalQuantity}</span>
+                      )}
+                    </div>
+                  </Link>
+                  
+                  <button className="mobile-menu-btn" onClick={toggleMenu}>
+                    ☰
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Navigation Menu */}
+          <nav className={`main-nav ${isMenuOpen ? 'mobile-open' : ''}`}>
+            <div className="container-full">
+              <ul className="nav-list">
+                <li className="nav-item">
+                  <Link to="/chat" className="nav-link">
+                    <i className="nav-icon">💬</i> Chat với AI
+                  </Link>
                 </li>
-                <li>
-                  <a href="/trang1">EGOV</a>
+                <li className="nav-item">
+                  <Link to="/menu2" className="nav-link">
+                    <i className="nav-icon">🔥</i> Sản phẩm nổi bật
+                  </Link>
                 </li>
-                <li>
-                  <a href="/admin/products">QUẢN TRỊ</a>
+                <li className="nav-item">
+                  <Link to="/menu3" className="nav-link">
+                    <i className="nav-icon">🎮</i> Khuyến mãi
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/menu4" className="nav-link">
+                    <i className="nav-icon">📱</i> Liên hệ
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/menu5" className="nav-link">
+                    <i className="nav-icon">ℹ️</i> Giới thiệu
+                  </Link>
                 </li>
               </ul>
             </div>
-            <div id="logo" className="logo1">
-              <img src={anhlogo} alt="Logo Banner" />
-            </div>
-            <div id="divtimkiem" style={{ width: "300px" }}>
-              Phần tìm kiếm
-            </div>
-          </div>
-
-          {/* Menu Bar Chính (Màu đỏ) */}
-          <div id="menubar" className="menubar">
-            <div className="menubar-left">
-              <a href="/menu1" className="menu-item">
-                Menu 1
-              </a>
-              <a href="/menu2" className="menu-item">
-                Menu 2
-              </a>
-              <a href="/menu3" className="menu-item">
-                Menu 3
-              </a>
-            </div>
-
-            <div className="menubar-right">
-              {user ? (
-                <>
-                  <span className="username">👤 {user.username}</span>
-                  <button className="logout-btn" onClick={handleLogout}>
-                    Đăng xuất
-                  </button>
-                </>
-              ) : (
-                <a href="/login" className="login-link">
-                  Đăng nhập
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Container Nội dung chính (Outlet) */}
-      <div id="container" className="container">
-        <Outlet />
+          </nav>
+        </header>
       </div>
 
-      {/* Footer */}
-      <footer>
-        <p style={{ margin: 0, padding: "20px" }}>
-          © 2025 Bản quyền thuộc về [Tên trang web của bạn]
-        </p>
+      {/* Main content vẫn giữ nguyên */}
+      <main className="main-content">
+        <div className="container">
+          <Outlet />
+        </div>
+      </main>
+
+      <footer className="footer">
+        <div className="container">
+          <div className="footer-content">
+            <div className="footer-section">
+              <h3 className="footer-title">Về chúng tôi</h3>
+              <p className="footer-text">
+                Chúng tôi cung cấp các giải pháp công nghệ hiện đại với chất lượng hàng đầu.
+              </p>
+            </div>
+            <div className="footer-section">
+              <h3 className="footer-title">Liên kết nhanh</h3>
+              <ul className="footer-links">
+                <li><Link to="/">Trang chủ</Link></li>
+                <li><Link to="/trang1">EGOV</Link></li>
+                <li><Link to="/admin/products">Quản trị</Link></li>
+              </ul>
+            </div>
+            <div className="footer-section">
+              <h3 className="footer-title">Liên hệ</h3>
+              <p className="footer-text">
+                Email: contact@example.com<br />
+                Hotline: 1900 1234
+              </p>
+            </div>
+          </div>
+          <div className="footer-bottom">
+            <p>&copy; 2023 Bản quyền thuộc về Công ty chúng tôi.</p>
+          </div>
+        </div>
       </footer>
-    </>
+    </div>
   );
 };
 
 export default Layout;
-// --- END: Component Layout Gộp Chung ---

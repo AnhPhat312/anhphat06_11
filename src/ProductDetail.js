@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "./supabaseClient";
+import { useCart } from "./CartContext";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const navigate = useNavigate();
-
+  const { addToCart } = useCart();
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -33,8 +34,16 @@ const ProductDetail = () => {
       </div>
     );
   }
+  const handleAddToCart = (e, product) => {
+    // 🛑 QUAN TRỌNG: Ngăn sự kiện click lan ra thẻ cha (tránh chuyển trang)
+    e.stopPropagation();
+
+    addToCart(product);
+    alert(`Đã thêm "${product.title}" vào giỏ hàng!`);
+  };
 
   return (
+    
     <div
       style={{
         maxWidth: "900px",
@@ -118,18 +127,27 @@ const ProductDetail = () => {
           </p>
 
           <button
+            onClick={(e) => handleAddToCart(e, product)} // Truyền event 'e' vào
             style={{
-              marginTop: "20px",
-              backgroundColor: "#28a745",
-              color: "#fff",
+              width: "100%",
+              padding: "10px",
+              backgroundColor: "#007bff",
+              color: "white",
               border: "none",
-              padding: "10px 16px",
               borderRadius: "6px",
               cursor: "pointer",
+              fontWeight: "600",
+              marginTop: "10px",
+              transition: "background 0.2s",
             }}
-            onClick={() => alert("Đã thêm vào giỏ hàng!")}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.backgroundColor = "#0056b3")
+            }
+            onMouseOut={(e) =>
+              (e.currentTarget.style.backgroundColor = "#007bff")
+            }
           >
-            🛒 Thêm vào giỏ hàng
+            🛒 Thêm vào giỏ
           </button>
         </div>
       </div>

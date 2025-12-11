@@ -21,6 +21,7 @@ const ListProducts_SP = () => {
     };
     fetchProducts();
   }, []);
+  
 
   return (
     <div style={{ padding: "20px" }}>

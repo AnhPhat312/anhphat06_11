@@ -7,6 +7,13 @@ export interface Product {
   category: string;
   image: string;
 }
+//Viet them 22/11
+export interface CartItem {
+  product: Product;
+  quantity: number;
+  // Bạn có thể thêm các field logic khác từ Flutter nếu cần, ví dụ:
+  // createdDate?: Date;
+}
 
 export const products: Product[] = [
   {
