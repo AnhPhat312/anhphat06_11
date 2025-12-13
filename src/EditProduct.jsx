@@ -19,7 +19,7 @@ const EditProduct = () => {
   useEffect(() => {
     if (!isNew) {
       supabase
-        .from("product1")
+        .from("products")
         .select("*")
         .eq("id", id)
         .single()
@@ -40,7 +40,7 @@ const EditProduct = () => {
       alert("✅ Đã thêm sản phẩm!");
     } else {
       const { error } = await supabase
-        .from("product1")
+        .from("")
         .update(product)
         .eq("id", id);
       if (error) return alert("Lỗi cập nhật: " + error.message);

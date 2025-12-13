@@ -17,7 +17,7 @@ const LoginPage = () => {
       if (username.trim() && password.trim()) {
         localStorage.setItem(
           "user",
-          JSON.stringify({ username, role: "user" })
+          JSON.stringify({ username, role: "admin" })
         );
         alert("✅ Đăng nhập thành công!");
         navigate("/");

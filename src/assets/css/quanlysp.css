@@ -36,10 +36,12 @@ h2 {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
+  color:black;
 }
 
 .product-table th {
   background: #f0f0f0;
+  color:black;
 }
 
 .product-table tr:hover {
@@ -58,7 +60,7 @@ h2 {
   padding: 6px 12px;
   border-radius: 4px;
   cursor: pointer;
-  color: white;
+  color: black;
   margin-right: 4px;
 }
 

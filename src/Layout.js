@@ -1,26 +1,51 @@
 import "./css/layout.css";
 import anhlogo from "./assets/images/banner (2).png";
-import { Outlet, useNavigate, Link } from "react-router-dom";
+import { Outlet, useNavigate, Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useCart } from "./CartContext";
 
 const Layout = () => {
   const [user, setUser] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
-
+  const location = useLocation();
   const { cartItems } = useCart();
+
   const totalQuantity = cartItems.reduce(
     (total, item) => total + item.quantity,
     0
   );
 
+  // --- PHẦN SỬA LỖI QUAN TRỌNG ---
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
+    // 1. Hàm kiểm tra User từ LocalStorage
+    const checkUser = () => {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        try {
+          const parsedUser = JSON.parse(storedUser);
+          setUser(parsedUser);
+          console.log("Đã đăng nhập:", parsedUser.username, "| Role:", parsedUser.role);
+        } catch (e) {
+          console.error("Lỗi đọc dữ liệu user", e);
+          setUser(null);
+        }
+      } else {
+        setUser(null);
+      }
+    };
+
+    checkUser(); // Chạy ngay lập tức
+
+    // 2. Xử lý sự kiện cuộn trang
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+
+    // Cleanup function
+    return () => window.removeEventListener("scroll", handleScroll);
+
+  }, [location.pathname]); // <--- THÊM CÁI NÀY: Chạy lại mỗi khi đổi trang
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -28,168 +53,170 @@ const Layout = () => {
     navigate("/login");
   };
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const isActive = (path) => (location.pathname === path ? "active" : "");
+
+  // Kiểm tra quyền Admin an toàn (không phân biệt hoa thường)
+  const isAdmin = user?.role && user.role.toLowerCase() === "admin";
 
   return (
-    <div className="theme-black-red">
-      {/* Toàn bộ header đặt trong một div có chiều rộng 100% */}
-      <div className="full-width-header">
-        <header className="header-container">
-          {/* Top Header - Cùng hàng với logo và search */}
-          <div className="top-header">
-            <div className="container-full">
-              <div className="top-header-content">
-                <div className="top-links-left">
-                  <ul className="top-links">
-                    <li>
-                      <Link to="/">TRANG CHỦ</Link>
-                    </li>
-                    <li>
-                      <Link to="/trang1">EGOV</Link>
-                    </li>
-                    <li>
-                      <Link to="/admin/products">QUẢN TRỊ</Link>
-                    </li>
-                  </ul>
-                </div>
-                
-                {/* User info ở bên phải */}
-                <div className="top-links-right">
-                  {user ? (
-                    <div className="user-info">
-                      <span className="user-greeting">
-                        <i className="user-icon">👤</i> {user.username}
-                      </span>
-                      <button className="logout-btn" onClick={handleLogout}>
-                        Đăng xuất
-                      </button>
-                    </div>
-                  ) : (
-                    <Link to="/login" className="login-link">
-                      Đăng nhập
-                    </Link>
-                  )}
-                </div>
-              </div>
+    <div className="app-root">
+      <header className={`site-header ${scrolled ? "scrolled" : ""}`}>
+        <div className="header-container">
+          
+          {/* --- TẦNG 1: TOP BAR --- */}
+          <div className="header-top-bar">
+            <div className="top-left">
+               {/* Giữ chỗ cho các link phụ nếu cần */}
             </div>
-          </div>
 
-          {/* Main Header - Logo, Search, Cart */}
-          <div className="main-header">
-            <div className="container-full">
-              <div className="header-content">
-                {/* Logo lớn hơn */}
-                <div className="logo-container">
-                  <Link to="/">
-                    <img src={anhlogo} alt="Logo" className="logo-large" />
+            <div className="top-right">
+              {user ? (
+                <div className="user-info">
+                  {/* Link tới trang thông tin cá nhân */}
+                  <Link to="/profile" className="user-name-link">
+                    Xin chào, <strong>{user.username}</strong>
                   </Link>
-                </div>
-
-                {/* Search bar */}
-                <div className="search-container-large">
-                  <div className="search-box">
-                    <input 
-                      type="text" 
-                      placeholder="Tìm kiếm sản phẩm..." 
-                      className="search-input"
-                    />
-                    <button className="search-btn">
-                      <i className="search-icon">🔍</i>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Cart và menu mobile */}
-                <div className="header-actions">
-                  <Link to="/cart" className="cart-btn">
-                    <div className="cart-icon-container">
-                      <i className="cart-icon">🛒</i>
-                      {totalQuantity > 0 && (
-                        <span className="cart-badge">{totalQuantity}</span>
-                      )}
-                    </div>
-                  </Link>
-                  
-                  <button className="mobile-menu-btn" onClick={toggleMenu}>
-                    ☰
+                  <button onClick={handleLogout} className="logout-link">
+                    (Đăng xuất)
                   </button>
                 </div>
-              </div>
+              ) : (
+                <Link to="/login" className="login-link">
+                  Đăng nhập / Đăng ký
+                </Link>
+              )}
             </div>
           </div>
 
-          {/* Navigation Menu */}
-          <nav className={`main-nav ${isMenuOpen ? 'mobile-open' : ''}`}>
-            <div className="container-full">
-              <ul className="nav-list">
-                <li className="nav-item">
-                  <Link to="/chat" className="nav-link">
-                    <i className="nav-icon">💬</i> Chat với AI
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/menu2" className="nav-link">
-                    <i className="nav-icon">🔥</i> Sản phẩm nổi bật
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/menu3" className="nav-link">
-                    <i className="nav-icon">🎮</i> Khuyến mãi
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/menu4" className="nav-link">
-                    <i className="nav-icon">📱</i> Liên hệ
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/menu5" className="nav-link">
-                    <i className="nav-icon">ℹ️</i> Giới thiệu
-                  </Link>
-                </li>
-              </ul>
+          {/* --- TẦNG 2: MAIN BAR --- */}
+          <div className="header-main-bar">
+            {/* Logo */}
+            <div className="header-col-left">
+              <Link to="/" className="logo-wrapper">
+                <img src={anhlogo} alt="Logo" />
+              </Link>
             </div>
-          </nav>
-        </header>
-      </div>
 
-      {/* Main content vẫn giữ nguyên */}
-      <main className="main-content">
-        <div className="container">
-          <Outlet />
+            {/* MENU CHÍNH */}
+            <div className="header-col-center">
+              <nav className={`main-nav ${isMenuOpen ? "mobile-active" : ""}`}>
+                
+                {/* --- NÚT ADMIN (Đã sửa logic hiển thị) --- */}
+                {isAdmin && (
+                  <Link
+                    to="/admin/products"
+                    className={`nav-item admin-link ${isActive("/admin/products")}`}
+                  >
+                    ⚙️ QUẢN TRỊ
+                  </Link>
+                )}
+
+                <Link
+                  to="/topproduct_sp"
+                  className={`nav-item highlight ${isActive("/topproduct_sp")}`}
+                >
+                  Top Collection 🔥
+                </Link>
+                <Link
+                  to="/listproduct_sp"
+                  className={`nav-item ${isActive("/listproduct_sp")}`}
+                >
+                  Sản phẩm
+                </Link>
+                <Link to="/chat" className={`nav-item ${isActive("/chat")}`}>
+                  AI Chat 🤖
+                </Link>
+                <Link to="/about" className={`nav-item ${isActive("/about")}`}>
+                  Thông tin
+                </Link>
+
+                <button
+                  className="close-menu"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  ×
+                </button>
+              </nav>
+            </div>
+
+            {/* Search & Cart */}
+            <div className="header-col-right">
+              <div className="search-box-stylish">
+                <input type="text" placeholder="Tìm sản phẩm..." />
+                <button>🔍</button>
+              </div>
+
+              <Link to="/cart" className="cart-btn-stylish">
+                <span className="cart-icon">🛒</span>
+                {totalQuantity > 0 && (
+                  <span className="cart-count">{totalQuantity}</span>
+                )}
+              </Link>
+
+              <button
+                className="mobile-toggle"
+                onClick={() => setIsMenuOpen(true)}
+              >
+                ☰
+              </button>
+            </div>
+          </div>
         </div>
+      </header>
+
+      <main className="page-content">
+        <Outlet />
       </main>
 
-      <footer className="footer">
-        <div className="container">
-          <div className="footer-content">
-            <div className="footer-section">
-              <h3 className="footer-title">Về chúng tôi</h3>
-              <p className="footer-text">
-                Chúng tôi cung cấp các giải pháp công nghệ hiện đại với chất lượng hàng đầu.
-              </p>
-            </div>
-            <div className="footer-section">
-              <h3 className="footer-title">Liên kết nhanh</h3>
-              <ul className="footer-links">
-                <li><Link to="/">Trang chủ</Link></li>
-                <li><Link to="/trang1">EGOV</Link></li>
-                <li><Link to="/admin/products">Quản trị</Link></li>
-              </ul>
-            </div>
-            <div className="footer-section">
-              <h3 className="footer-title">Liên hệ</h3>
-              <p className="footer-text">
-                Email: contact@example.com<br />
-                Hotline: 1900 1234
-              </p>
+      {/* FOOTER MỚI ĐẸP */}
+      <footer className="site-footer">
+        <div className="footer-container">
+          {/* Cột 1: Thông tin thương hiệu */}
+          <div className="footer-col">
+            <h3 className="footer-logo">
+              SNEAKER<span className="dot">.</span>
+            </h3>
+            <p className="footer-desc">
+              Nơi đam mê cất bước. Chúng tôi cam kết mang đến những đôi giày
+              chính hãng với chất lượng và dịch vụ tốt nhất thị trường.
+            </p>
+            <div className="social-links">
+              <a href="#">FB</a>
+              <a href="#">IG</a>
+              <a href="#">TT</a>
+              <a href="#">YT</a>
             </div>
           </div>
-          <div className="footer-bottom">
-            <p>&copy; 2023 Bản quyền thuộc về Công ty chúng tôi.</p>
+
+          {/* Cột 2: Đường dẫn nhanh */}
+          <div className="footer-col">
+            <h4>Khám Phá</h4>
+            <ul className="footer-links">
+              <li><Link to="/about">Về chúng tôi</Link></li>
+              <li><Link to="/listproduct_sp">Sản phẩm mới</Link></li>
+              <li><Link to="/promotions">Khuyến mãi Hot</Link></li>
+              <li><Link to="/chat">AI Tư vấn</Link></li>
+            </ul>
           </div>
+
+          {/* Cột 3: Liên hệ & Đăng ký */}
+          <div className="footer-col">
+            <h4>Hỗ Trợ & Liên Hệ</h4>
+            <ul className="footer-links">
+              <li>📍 111/2 Đường số 1</li>
+              <li>📞 0792331205</li>
+              <li>✉️ support@sneakerstore.com</li>
+            </ul>
+
+            <div className="newsletter-box">
+              <input type="email" placeholder="Nhập email..." />
+              <button>➜</button>
+            </div>
+          </div>
+        </div>
+
+        <div className="footer-bottom">
+          <p>&copy; 2025 Sneaker Store. All rights reserved.</p>
         </div>
       </footer>
     </div>

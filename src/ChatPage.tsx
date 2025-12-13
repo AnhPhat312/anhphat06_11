@@ -101,7 +101,7 @@ const ChatPage = () => {
       <div style={styles.chatBox}>
         {/* Header */}
         <div style={styles.header}>
-          <h3>🤖 Chatbot HCE AI</h3>
+          <h3>🤖 AI Hỗ Trợ</h3>
         </div>
 
         {/* Khu vực hiển thị tin nhắn */}

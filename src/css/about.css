@@ -1,0 +1,190 @@
+/* --- GLOBAL --- */
+.about-page {
+  background-color: #121212;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* --- 1. HERO SECTION --- */
+.about-hero {
+  height: 60vh;
+  background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+              url('https://images.unsplash.com/photo-1552346154-21d32810aba3?q=80&w=2070&auto=format&fit=crop'); 
+              /* Ảnh nền giày chất lượng cao từ Unsplash */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* Hiệu ứng Parallax */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.hero-content h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.hero-content .highlight {
+  color: #d52b1e; /* Màu đỏ chủ đạo */
+  text-shadow: 0 0 10px rgba(213, 43, 30, 0.5);
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  color: #ccc;
+}
+
+/* --- 2. STORY SECTION --- */
+.about-section {
+  padding: 80px 20px;
+}
+
+.story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  align-items: center;
+}
+
+.story-text h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  border-left: 5px solid #d52b1e;
+  padding-left: 15px;
+}
+
+.story-text p {
+  line-height: 1.8;
+  color: black;
+  margin-bottom: 15px;
+  font-size: 1.05rem;
+}
+
+.story-image img {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 20px 20px 0px #222; /* Hiệu ứng khung ảnh */
+  transition: 0.3s;
+}
+
+.story-image img:hover {
+  transform: translateY(-5px);
+  box-shadow: 20px 20px 0px #d52b1e;
+}
+
+/* Stats */
+.stats-row {
+  display: flex;
+  gap: 40px;
+  margin-top: 30px;
+  border-top: 1px solid #333;
+  padding-top: 20px;
+}
+
+.stat-item h3 {
+  font-size: 2rem;
+  color: #fff;
+  margin-bottom: 5px;
+}
+
+.stat-item span {
+  color: #888;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+/* --- 3. WHY CHOOSE US --- */
+.why-choose-us {
+  background-color: #1a1a1a;
+  padding: 80px 0;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 50px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.feature-card {
+  background: #252525;
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  transition: 0.3s;
+  border: 1px solid transparent;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  border-color: #d52b1e;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.feature-card .icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.feature-card h3 {
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+.feature-card p {
+  color: #aaa;
+  line-height: 1.6;
+}
+
+/* --- 4. CTA SECTION --- */
+.about-cta {
+  text-align: center;
+  padding: 100px 20px;
+  background: linear-gradient(to right, #000, #1a1a1a);
+}
+
+.about-cta h2 { font-size: 2.5rem; margin-bottom: 15px; }
+.about-cta p { color: #888; margin-bottom: 30px; font-size: 1.2rem; }
+
+.cta-btn {
+  display: inline-block;
+  background: #d52b1e;
+  color: white;
+  padding: 15px 40px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.1rem;
+  border-radius: 30px;
+  transition: 0.3s;
+  box-shadow: 0 5px 15px rgba(213, 43, 30, 0.4);
+}
+
+.cta-btn:hover {
+  background: #fff;
+  color: #d52b1e;
+  transform: scale(1.05);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .hero-content h1 { font-size: 2rem; }
+  .story-grid { grid-template-columns: 1fr; }
+  .stats-row { justify-content: space-between; }
+  .about-cta { padding: 60px 20px; }
+}
