@@ -34,10 +34,12 @@ import TopProducts_SP from "./TopProducts_SP"; // Đảm bảo component Bục O
 import About from "./About";
 // @ts-ignore
 import Home from "./Home";
+// @ts-ignore
+import CartPage from "./CartPage";
 
 // --- IMPORT MỚI CHO GIỎ HÀNG ---
 import { CartProvider } from "./CartContext";
-import CartPage from "./CartPage";
+
 
 export default function App() {
   return (

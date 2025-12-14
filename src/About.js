@@ -11,7 +11,7 @@ const About = () => {
       {/* 1. HERO SECTION */}
       <section className="about-hero">
         <div className="hero-content">
-          <h1>CHÚNG TÔI LÀ <span className="highlight">SNEAKER STORE</span></h1>
+          <h1>CHÚNG TÔI LÀ <span className="highlight">SNEAKER AP </span></h1>
           <p>Nơi đam mê cất bước. Chất lượng khẳng định phong cách.</p>
         </div>
       </section>
@@ -22,7 +22,7 @@ const About = () => {
           <div className="story-text">
             <h2>Câu Chuyện Của Chúng Tôi</h2>
             <p>
-              Được thành lập vào năm 2024, chúng tôi bắt đầu với một niềm đam mê đơn giản: 
+              Được thành lập vào năm 2025, chúng tôi bắt đầu với một niềm đam mê đơn giản: 
               <strong> Những đôi giày không chỉ để đi, mà là để thể hiện cá tính.</strong>
             </p>
             <p>

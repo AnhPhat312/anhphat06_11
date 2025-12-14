@@ -347,6 +347,7 @@ body {
   font-size: 1.8rem;
   font-weight: 800;
   margin-bottom: 15px;
+  margin-right: 100px;
   letter-spacing: 1px;
 }
 .footer-logo .dot { color: #d52b1e; } /* Dấu chấm đỏ */
@@ -357,7 +358,7 @@ body {
   max-width: 300px;
 }
 
-.social-links { display: flex; gap: 15px; }
+.social-links { display: flex; gap: 15px; margin-left: 20p; }
 .social-links a {
   width: 35px; height: 35px;
   background: #222;
@@ -453,7 +454,31 @@ body {
   }
   
   .footer-desc { margin: 0 auto 20px; }
-  .social-links { justify-content: center; }
+  .social-links { display: flex;
+    gap: 10px;
+    margin-top: 15px;
+     }
+    .social-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1); /* Nền mờ sang trọng */
+      color: #ffffff;
+      border-radius: 50%; /* Bo tròn */
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    /* Hiệu ứng khi di chuột vào từng icon */
+    .social-btn:hover {
+      transform: translateY(-3px); /* Nảy lên nhẹ */
+      color: #fff;
+    }
+    
+    /* Màu nền riêng cho từng mạng xã hội khi hover */
   .footer-col h4::after { left: 50%; transform: translateX(-50%); } /* Căn giữa gạch chân */
 }
 /* --- Style riêng cho nút Admin --- */

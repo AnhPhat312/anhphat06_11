@@ -12,8 +12,9 @@ const TopProducts_SP = () => {
         const { data, error } = await supabase
           .from("products")
           .select("*")
-          .order("rating_rate", { ascending: false })
-          .order("rating_count", { ascending: false })
+          // .order("rating_rate", { ascending: false })
+          // .order("rating_count", { ascending: false })
+          .eq('is_hot', true)
           .limit(3);
 
         if (error) throw error;
@@ -174,8 +175,8 @@ const TopProducts_SP = () => {
 
               {/* Ảnh sản phẩm (sẽ nhảy ra ngoài khi hover) */}
               <img 
-                src={product.image} 
-                alt={product.title} 
+                src={product.image_url} 
+                alt={product.name} 
                 className="t-character" 
               />
 
@@ -189,9 +190,9 @@ const TopProducts_SP = () => {
                     overflow: "hidden", 
                     textOverflow: "ellipsis" 
                 }}>
-                  {product.title}
+                  {product.name}
                 </h4>
-                <div style={{ fontWeight: "bold", color: "#e63946" }}>${product.price}</div>
+                <div style={{ fontWeight: "bold", color: "#e63946" }}>${product.price?.toLocaleString('vi-VN')} đ :</div>
                 <div style={{ fontSize: "0.8rem", color: "#666" }}>⭐ {product.rating_rate}</div>
               </div>
             </div>
